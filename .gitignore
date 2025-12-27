@@ -1,0 +1,6 @@
+# IntelliJ / IDE
+.idea/
+*.iml
+
+# Config repository (must stay external)
+config-repo/
