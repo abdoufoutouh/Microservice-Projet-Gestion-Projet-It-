@@ -1,9 +1,0 @@
-server:
-  port: 8081
-
-spring:
-  application:
-    name: project-service
-
-test:
-  message: "Config Server fonctionne correctement"
