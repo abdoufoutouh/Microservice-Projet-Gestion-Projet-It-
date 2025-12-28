@@ -1,8 +1,7 @@
 package com.projectit.project_service.controllers;
 
-import com.projectit.project_service.domain.Category;
 import com.projectit.project_service.domain.Project;
-import com.projectit.project_service.repository.CategoryRepo;
+import com.projectit.project_service.dto.ProjectRequestDTO;
 import com.projectit.project_service.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,20 +24,17 @@ public class ProjectController {
 
     // Create Project
     @PostMapping
-    public ResponseEntity<Project> createProject(@RequestBody Project project) {
-        Project createdProject = projectService.createProject(project);
-        return new ResponseEntity(createdProject, HttpStatus.CREATED);
+    public ResponseEntity<Project> createProject(@RequestBody ProjectRequestDTO projectDTO) {
+        Project createdProject = projectService.createProject(projectDTO);
+        return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
     }
-
 
     // Update Project
     @PutMapping("/{id}")
     public ResponseEntity<Project> updateProject(
-            @RequestBody Project project , @PathVariable Long id) {
-
-        Project updatedProject = projectService.updateProject(id, project);
-        return new ResponseEntity(updatedProject, HttpStatus.OK);
-
+            @PathVariable Long id, @RequestBody ProjectRequestDTO projectDTO) {
+        Project updatedProject = projectService.updateProject(id, projectDTO);
+        return new ResponseEntity<>(updatedProject, HttpStatus.OK);
     }
     // DELETE PROJECT
   @DeleteMapping("/{id}")
@@ -66,4 +62,5 @@ public class ProjectController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
+    
 }

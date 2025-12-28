@@ -2,6 +2,7 @@ package com.projectit.project_service.service;
 
 import com.projectit.project_service.domain.Category;
 import com.projectit.project_service.domain.Project;
+import com.projectit.project_service.dto.ProjectRequestDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,11 +10,11 @@ import java.util.List;
 @Service
 public interface ProjectService {
 
-    Project createProject(Project project) ;
-
-    Project updateProject(Long idproject  , Project updatedProject);
+    Project createProject(ProjectRequestDTO projectDTO);
     
-    void deleteProject(Long idproject);
+    Project updateProject(Long id, ProjectRequestDTO projectDTO);
+    
+    void deleteProject(Long id);
     
     List<Project> getProjectsByUserId(Long userId);
     

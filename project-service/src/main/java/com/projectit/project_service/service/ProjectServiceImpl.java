@@ -1,7 +1,7 @@
 package com.projectit.project_service.service;
-
 import com.projectit.project_service.domain.Category;
 import com.projectit.project_service.domain.Project;
+import com.projectit.project_service.dto.ProjectRequestDTO;
 import com.projectit.project_service.repository.CategoryRepo;
 import com.projectit.project_service.repository.ProjetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,37 +24,7 @@ public class ProjectServiceImpl implements ProjectService {
         this.categoryRepo = categoryRepo;
     }
 
-    @Override
-    public Project createProject(Project project ) {
-
-        Long categoryId = project.getCategory().getId();
-        Category category = categoryRepo.findById(categoryId)
-                        .orElseThrow(() -> new RuntimeException("Category not found"));
-
-        project.setCategory(category);
-        return projetRepository.save(project);
-
-    }
-
-    @Override
-    public Project updateProject(Long idproject, Project updatedproject ) {
-
-        Project existingproject = projetRepository.findById(idproject)
-                .orElseThrow(() -> new RuntimeException("Project not found"));
-
-        existingproject.setDescription(updatedproject.getDescription());
-        existingproject.setTitle(updatedproject.getTitle());
-        existingproject.setDescription(updatedproject.getDescription());
-        Long categoryId = updatedproject.getCategory().getId();
-
-        Category category = categoryRepo.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-        existingproject.setCategory(updatedproject.getCategory());
-
-        return projetRepository.save(existingproject);
-
-    }
-
+    
     @Override
     public void deleteProject(Long id) {
 
@@ -87,6 +57,63 @@ public class ProjectServiceImpl implements ProjectService {
             throw new IllegalArgumentException("Category ID cannot be null");
         }
         return projetRepository.findByCategoryId(categoryId);
+    }
+
+    @Override
+    public Project createProject(ProjectRequestDTO projectDTO) {
+        if (projectDTO == null) {
+            throw new IllegalArgumentException("Project DTO cannot be null");
+        }
+
+        Project project = new Project();
+        project.setTitle(projectDTO.getTitle());
+        project.setDescription(projectDTO.getDescription());
+        project.setOwnerUserId(projectDTO.getOwnerUserId());
+
+        Category category = handleCategory(projectDTO);
+        project.setCategory(category);
+
+        return projetRepository.save(project);
+    }
+
+    @Override
+    public Project updateProject(Long id, ProjectRequestDTO projectDTO) {
+        if (id == null) {
+            throw new IllegalArgumentException("Project ID cannot be null");
+        }
+        if (projectDTO == null) {
+            throw new IllegalArgumentException("Project DTO cannot be null");
+        }
+
+        Project existingProject = projetRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        existingProject.setTitle(projectDTO.getTitle());
+        existingProject.setDescription(projectDTO.getDescription());
+
+        Category category = handleCategory(projectDTO);
+        existingProject.setCategory(category);
+
+        return projetRepository.save(existingProject);
+    }
+
+    private Category handleCategory(ProjectRequestDTO projectDTO) {
+        if (projectDTO.getNewCategoryName() != null && !projectDTO.getNewCategoryName().trim().isEmpty()) {
+            // Vérifier si la catégorie existe déjà
+            String categoryName = projectDTO.getNewCategoryName().trim();
+            return categoryRepo.findByName(categoryName)
+                    .orElseGet(() -> {
+                        Category newCategory = new Category();
+                        newCategory.setName(categoryName);
+                        return categoryRepo.save(newCategory);
+                    });
+        } else if (projectDTO.getCategoryId() != null) {
+            // Utiliser catégorie existante
+            return categoryRepo.findById(projectDTO.getCategoryId())
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+        } else {
+            throw new IllegalArgumentException("Either categoryId or newCategoryName must be provided");
+        }
     }
 
 
