@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/projects")
 public class ProjectController {
@@ -27,5 +29,26 @@ public class ProjectController {
         return new ResponseEntity(createdProject, HttpStatus.CREATED);
     }
 
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Project> updateProject(
+            @RequestBody Project project , @PathVariable Long id) {
+
+        Project updatedProject = projectService.updateProject(id, project);
+        return new ResponseEntity(updatedProject, HttpStatus.OK);
+
+    }
+
+  @DeleteMapping("/{id}")
+    public ResponseEntity<Project> deleteProject(@PathVariable Long id) {
+        projectService.deleteProject(id);
+        return new ResponseEntity(HttpStatus.OK);
+  }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Project>> getProjectsByUserId(@PathVariable Long userId) {
+        List<Project> projects = projectService.getProjectsByUserId(userId);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
 
 }

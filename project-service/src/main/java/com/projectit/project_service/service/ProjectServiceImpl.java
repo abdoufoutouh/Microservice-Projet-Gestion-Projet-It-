@@ -7,6 +7,8 @@ import com.projectit.project_service.repository.ProjetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
@@ -32,6 +34,43 @@ public class ProjectServiceImpl implements ProjectService {
         project.setCategory(category);
         return projetRepository.save(project);
 
+    }
+
+    @Override
+    public Project updateProject(Long idproject, Project updatedproject ) {
+
+        Project existingproject = projetRepository.findById(idproject)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+
+        existingproject.setDescription(updatedproject.getDescription());
+        existingproject.setTitle(updatedproject.getTitle());
+        existingproject.setDescription(updatedproject.getDescription());
+        Long categoryId = updatedproject.getCategory().getId();
+
+        Category category = categoryRepo.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        existingproject.setCategory(updatedproject.getCategory());
+
+        return projetRepository.save(existingproject);
+
+    }
+
+    @Override
+    public void deleteProject(Long id) {
+
+      Project project = projetRepository.findById(id)
+              .orElseThrow(() -> new RuntimeException("Project not found"));
+
+      projetRepository.delete(project);
+
+    }
+
+    @Override
+    public List<Project> getProjectsByUserId(Long userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
+        return projetRepository.findByOwnerUserId(userId);
     }
 
 
