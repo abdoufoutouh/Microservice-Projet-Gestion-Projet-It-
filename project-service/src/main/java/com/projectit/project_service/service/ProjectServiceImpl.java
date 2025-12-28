@@ -73,5 +73,21 @@ public class ProjectServiceImpl implements ProjectService {
         return projetRepository.findByOwnerUserId(userId);
     }
 
+    @Override
+    public List<Project> searchProjectsByTitle(String title) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be null or empty");
+        }
+        return projetRepository.findByTitleContainingIgnoreCase(title.trim());
+    }
+
+    @Override
+    public List<Project> filterProjectsByCategory(Long categoryId) {
+        if (categoryId == null) {
+            throw new IllegalArgumentException("Category ID cannot be null");
+        }
+        return projetRepository.findByCategoryId(categoryId);
+    }
+
 
 }

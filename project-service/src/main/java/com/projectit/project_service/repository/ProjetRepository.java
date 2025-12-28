@@ -10,5 +10,9 @@ import java.util.List;
 public interface ProjetRepository  extends JpaRepository<Project, Long> {
 
     List<Project> findByOwnerUserId(Long ownerUserId);
+    
+    List<Project> findByTitleContainingIgnoreCase(String title);
+    
+    List<Project> findByCategoryId(Long categoryId);
 
 }

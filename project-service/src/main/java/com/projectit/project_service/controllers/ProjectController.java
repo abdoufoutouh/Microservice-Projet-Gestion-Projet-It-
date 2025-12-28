@@ -23,6 +23,7 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
+    // Create Project
     @PostMapping
     public ResponseEntity<Project> createProject(@RequestBody Project project) {
         Project createdProject = projectService.createProject(project);
@@ -30,6 +31,7 @@ public class ProjectController {
     }
 
 
+    // Update Project
     @PutMapping("/{id}")
     public ResponseEntity<Project> updateProject(
             @RequestBody Project project , @PathVariable Long id) {
@@ -38,7 +40,7 @@ public class ProjectController {
         return new ResponseEntity(updatedProject, HttpStatus.OK);
 
     }
-
+    // DELETE PROJECT
   @DeleteMapping("/{id}")
     public ResponseEntity<Project> deleteProject(@PathVariable Long id) {
         projectService.deleteProject(id);
@@ -48,6 +50,19 @@ public class ProjectController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Project>> getProjectsByUserId(@PathVariable Long userId) {
         List<Project> projects = projectService.getProjectsByUserId(userId);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Project>> searchProjectsByTitle(@RequestParam String title) {
+        List<Project> projects = projectService.searchProjectsByTitle(title);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
+
+    // Filter Projects by Category
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<Project>> filterProjectsByCategory(@PathVariable Long categoryId) {
+        List<Project> projects = projectService.filterProjectsByCategory(categoryId);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 

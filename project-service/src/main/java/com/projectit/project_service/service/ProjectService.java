@@ -16,4 +16,8 @@ public interface ProjectService {
     void deleteProject(Long idproject);
     
     List<Project> getProjectsByUserId(Long userId);
+    
+    List<Project> searchProjectsByTitle(String title);
+    
+    List<Project> filterProjectsByCategory(Long categoryId);
 }
