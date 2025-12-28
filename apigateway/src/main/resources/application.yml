@@ -4,3 +4,7 @@ server:
 spring:
   application:
     name: apigateway
+
+eureka:
+  client:
+    enabled: false
