@@ -27,10 +27,12 @@ public class ProjectServiceImpl implements ProjectService {
 
         Long categoryId = project.getCategory().getId();
         Category category = categoryRepo.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                        .orElseThrow(() -> new RuntimeException("Category not found"));
 
         project.setCategory(category);
         return projetRepository.save(project);
 
     }
+
+
 }
