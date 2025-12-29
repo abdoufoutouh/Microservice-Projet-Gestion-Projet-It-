@@ -1,0 +1,18 @@
+package com.projectit.task_service.dto;
+
+import com.projectit.task_service.enums.TasksStatus;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class TaskStatusUpdateRequest {
+    
+    @NotNull(message = "Status is required")
+    private TasksStatus status;
+}
