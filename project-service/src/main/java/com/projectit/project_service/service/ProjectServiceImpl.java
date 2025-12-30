@@ -60,6 +60,11 @@ public class  ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<Project> getAllProjects() {
+        return projetRepository.findAll();
+    }
+
+    @Override
     public Project createProject(ProjectRequestDTO projectDTO) {
         if (projectDTO == null) {
             throw new IllegalArgumentException("Project DTO cannot be null");

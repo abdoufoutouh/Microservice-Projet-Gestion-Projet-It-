@@ -21,4 +21,6 @@ public interface ProjectService {
     List<Project> searchProjectsByTitle(String title);
     
     List<Project> filterProjectsByCategory(Long categoryId);
+
+    List<Project> getAllProjects();
 }
